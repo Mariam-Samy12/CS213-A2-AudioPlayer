@@ -1,4 +1,4 @@
-#pragma once // PlayerGUI.h
+﻿#pragma once // PlayerGUI.h
 #include <JuceHeader.h>
 #include "PlayerAudio.h"
 class PlayerGUI : public juce::Component,
@@ -18,9 +18,14 @@ public:
 private:
 	PlayerAudio playerAudio;
 	// GUI elements
-	juce::TextButton loadButton{ "Load File" };
-	juce::TextButton restartButton{ "Restart" };
-	juce::TextButton stopButton{ "Stop" };
+
+	juce::TextButton loadButton{ "Load File" };  
+juce::TextButton restartButton{ "Restart" };  
+juce::TextButton stopButton{ "Stop" };  
+juce::TextButton playPauseButton{ "Play" };  
+juce::TextButton goStartButton{ "<" };  
+juce::TextButton goEndButton{ ">" };
+
 	juce::Slider volumeSlider;
 	juce::TextButton loopButton{ "Loop: Off" };//LOOP
 	
