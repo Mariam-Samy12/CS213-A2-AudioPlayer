@@ -10,7 +10,7 @@ public:
 	~PlayerGUI() override;
 
 	void resized() override;
-	
+
 	void prepareToPlay(int samplesPerBlockExpected, double sampleRate);
 	void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
 	void releaseResources();
@@ -18,13 +18,17 @@ public:
 private:
 	PlayerAudio playerAudio;
 	// GUI elements
-	juce::TextButton loadButton{ "Load File"};
-	juce::TextButton restartButton{ "Restart"};
-	juce::TextButton stopButton{ "Stop"};
-	juce::TextButton playPauseButton{ "Play" };
-	juce::TextButton goStartButton{ "<" };
-	juce::TextButton goEndButton{ ">" };
+
+	juce::TextButton loadButton{ "Load File" };  
+juce::TextButton restartButton{ "Restart" };  
+juce::TextButton stopButton{ "Stop" };  
+juce::TextButton playPauseButton{ "Play" };  
+juce::TextButton goStartButton{ "<" };  
+juce::TextButton goEndButton{ ">" };
+
 	juce::Slider volumeSlider;
+	juce::TextButton loopButton{ "Loop: Off" };//LOOP
+	
 	std::unique_ptr < juce::FileChooser> fileChooser;
 	// Event handlers
 	void buttonClicked(juce::Button* button) override;

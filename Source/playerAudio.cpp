@@ -1,5 +1,4 @@
 ﻿
-
 #include "playerAudio.h"
 PlayerAudio::PlayerAudio()
 {
@@ -17,6 +16,13 @@ void PlayerAudio::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 void PlayerAudio::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     transportSource.getNextAudioBlock(bufferToFill);
+    if (isLooping && !transportSource.isPlaying() && transportSource.getCurrentPosition() >= getLength())
+    {
+        transportSource.setPosition(0.0);
+        transportSource.start();
+    }//LOOP
+
+
 }
 
 void PlayerAudio::releaseResources()
@@ -57,7 +63,7 @@ void PlayerAudio::stop() {
 
     transportSource.stop();
 }
-void PlayerAudio::setGain( float gain) {
+void PlayerAudio::setGain(float gain) {
 
     transportSource.setGain(gain);
 }
@@ -70,3 +76,7 @@ double  PlayerAudio::getPosition() const {
 double  PlayerAudio::getLength() const {
     return transportSource.getLengthInSeconds();
 }
+void PlayerAudio::setLooping(bool shouldLoop)
+{
+    isLooping = shouldLoop;
+}//LOOP
