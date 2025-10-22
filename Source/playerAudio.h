@@ -15,8 +15,13 @@ public:
 	void setPosition(double pos);
 	double getPosition() const;
 	double getLength() const;
+	void setLooping(bool shouldLoop); // LOOP
+	bool getLooping() const { return isLooping; }//LOOP
+
 private:
 	juce::AudioFormatManager formatManager;
 	std::unique_ptr< juce::AudioFormatReaderSource >readerSource;
 	juce::AudioTransportSource transportSource;
+	bool isLooping = false;//LOOP
+
 };

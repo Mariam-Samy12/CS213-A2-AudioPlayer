@@ -44,11 +44,16 @@ void PlayerGUI::resized()
     int y = 20;
     loadButton.setBounds(20, y, 100, 40);
     restartButton.setBounds(140, y, 80, 40);
-    stopButton.setBounds(240, y, 80, 40);
+    stopButton.setBounds(240, y, 80, 40); 
+    loopButton.setBounds(340, y, 100, 40); // LOOP
     /*prevButton.setBounds(340, y, 80, 40);
     nextButton.setBounds(440, y, 80, 40);*/
 
     volumeSlider.setBounds(20, 100, getWidth() - 40, 30);
+   
+    addAndMakeVisible(loopButton);//LOOP
+    loopButton.addListener(this);//LOOP
+    
 }
 PlayerGUI::~PlayerGUI()
 {
@@ -73,7 +78,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
                 auto file = fc.getResult();
                 if (file.existsAsFile()) {
                     playerAudio.loadFile(file);
-               }
+                }
             });
     }
 
@@ -87,6 +92,13 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         playerAudio.stop();
         playerAudio.setPosition(0.0);
     }
+    else if (button == &loopButton)//LOOP
+    {
+        bool newState = !playerAudio.getLooping(); // LOOP
+        playerAudio.setLooping(newState);          // LOOP
+        loopButton.setButtonText(newState ? "Loop: On" : "Loop: Off"); // LOOP
+    }
+   
 
 }
 
@@ -95,4 +107,5 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
 {
     if (slider == &volumeSlider)
         playerAudio.setGain((float)slider->getValue());
+    
 }
