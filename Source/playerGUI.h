@@ -25,7 +25,7 @@ juce::TextButton stopButton{ "Stop" };
 juce::TextButton playPauseButton{ "Play" };  
 juce::TextButton goStartButton{ "<" };  
 juce::TextButton goEndButton{ ">" };
-
+juce::Label infoLabel;
 	juce::Slider volumeSlider;
 	juce::TextButton loopButton{ "Loop: Off" };//LOOP
 	

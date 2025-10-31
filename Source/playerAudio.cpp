@@ -1,5 +1,8 @@
 ﻿
 #include "playerAudio.h"
+#include <taglib/fileref.h>
+#include <taglib/tag.h>
+
 PlayerAudio::PlayerAudio()
 {
     formatManager.registerBasicFormats();
@@ -50,6 +53,23 @@ bool PlayerAudio::loadFile(const juce::File& file)
                 nullptr,
                 reader->sampleRate);
             transportSource.start();
+            TagLib::FileRef f(file.getFullPathName().toRawUTF8());
+            if (!f.isNull() && f.tag())
+            {
+                TagLib::Tag* tag = f.tag();
+                title = juce::String::fromUTF8(tag->title().toCString(true));
+                artist = juce::String::fromUTF8(tag->artist().toCString(true));
+                album = juce::String::fromUTF8(tag->album().toCString(true));
+            }
+            else
+            {
+                title = file.getFileNameWithoutExtension();
+                artist = "Unknown Artist";
+                album = "Unknown Album";
+            }
+
+            duration = reader->lengthInSamples / reader->sampleRate;
+
         }
     }
     return true;

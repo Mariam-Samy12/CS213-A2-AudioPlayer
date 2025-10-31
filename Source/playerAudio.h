@@ -17,11 +17,15 @@ public:
 	double getLength() const;
 	void setLooping(bool shouldLoop); // LOOP
 	bool getLooping() const { return isLooping; }//LOOP
-
+	juce::String getTitle() const { return title; }
+	juce::String getArtist() const { return artist; }
+	juce::String getAlbum() const { return album; }
+	double getDuration() const { return duration; }
 private:
 	juce::AudioFormatManager formatManager;
 	std::unique_ptr< juce::AudioFormatReaderSource >readerSource;
 	juce::AudioTransportSource transportSource;
 	bool isLooping = false;//LOOP
-
+	juce::String title, artist, album;
+	double duration = 0.0;
 };
