@@ -34,14 +34,6 @@ PlayerGUI::PlayerGUI()
     volumeSlider.setValue(0.5);
     volumeSlider.addListener(this);
     addAndMakeVisible(volumeSlider);
-   //5
-  
-    infoLabel.setColour(juce::Label::textColourId, juce::Colours::white);
-    infoLabel.setFont(juce::Font(16.0f));
-    infoLabel.setText("No file loaded", juce::dontSendNotification);
-    addAndMakeVisible(infoLabel);
-
-
 }
 
 void PlayerGUI::resized()
@@ -58,8 +50,6 @@ void PlayerGUI::resized()
     goEndButton.setBounds(220, 70, 80, 30);
     infoLabel.setBounds(20, 160, getWidth() - 40, 60);//5
 
-
-
     volumeSlider.setBounds(20, 110, getWidth() - 40, 30);
 }
 
@@ -74,9 +64,9 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         fileChooser = std::make_unique<juce::FileChooser>(
             "Select an audio file...",
             juce::File{},
-            ".wav;*.mp3;*.flac;*.aiff;*.aif;*.ogg;*.aac"
+            "*.wav;*.mp3;*.flac;*.aiff;*.aif;*.ogg;*.aac;*.mpeg"
         );
-        
+
 
         fileChooser->launchAsync(
             juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles,
@@ -84,23 +74,7 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             {
                 auto file = fc.getResult();
                 if (file.existsAsFile())
-                {
-                    if (playerAudio.loadFile(file))
-                    {
-                        // Build the info string from playerAudio getters
-                        juce::String info;
-                        info << "Title: " << playerAudio.getTitle()
-                            << "   | Artist: " << playerAudio.getArtist()
-                            << "   | Album: " << playerAudio.getAlbum()
-                            << "   | Duration: " << juce::String(playerAudio.getDuration(), 2) << "s";
-
-                        infoLabel.setText(info, juce::dontSendNotification);
-                    }
-                    else
-                    {
-                        infoLabel.setText("Failed to load file", juce::dontSendNotification);
-                    }
-                }
+                    playerAudio.loadFile(file);
             });
 
     }
@@ -156,29 +130,26 @@ void PlayerGUI::buttonClicked(juce::Button* button)
     {
         if (!isMuted)
         {
-            
+
             lastVolume = volumeSlider.getValue();
 
-            
+
             playerAudio.setGain(0.0f);
 
-            
+
             muteButton.setButtonText("Unmute");
         }
         else
         {
-            
+
             playerAudio.setGain((float)lastVolume);
             volumeSlider.setValue(lastVolume);
             muteButton.setButtonText("Mute");
         }
 
-        
+
         isMuted = !isMuted;
     }
-
-
-
 
 }
 

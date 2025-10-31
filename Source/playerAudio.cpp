@@ -1,8 +1,4 @@
-﻿#include "playerAudio.h"
-//5
-#include <taglib/fileref.h>
-#include <taglib/tag.h>
-//
+#include "playerAudio.h"
 
 PlayerAudio::PlayerAudio()
 {
@@ -117,13 +113,13 @@ void PlayerAudio::setLooping(bool shouldLoop)
     isLooping = shouldLoop;
 }
 
-// 🔇 Mute/Unmute
+//  Mute/Unmute
 void PlayerAudio::setMuted(bool shouldMute)
 {
     if (shouldMute && !isMuted)
     {
         lastGain = transportSource.getGain();
-        
+
     }
     else if (!shouldMute && isMuted)
     {

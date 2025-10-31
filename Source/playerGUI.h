@@ -28,10 +28,6 @@ private:
     juce::TextButton goEndButton{ ">|" };
     juce::TextButton loopButton{ "Loop: Off" };
     juce::TextButton muteButton{ "Mute" }; //  New Mute button
-    juce::Label infoLabel; // 5
-
-
-
 
     juce::Slider volumeSlider;
 
@@ -41,7 +37,7 @@ private:
     void buttonClicked(juce::Button* button) override;
     void sliderValueChanged(juce::Slider* slider) override;
 
-    // 🔇 For mute state
+    //  For mute state
     bool isMuted = false;
     double lastVolume = 0.5;
 
