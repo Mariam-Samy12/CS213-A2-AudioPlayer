@@ -2,9 +2,12 @@
 #include <JuceHeader.h>
 #include "PlayerAudio.h"
 
-class PlayerGUI : public juce::Component,
+class PlayerGUI :
+    public juce::Component,
     public juce::Button::Listener,
-    public juce::Slider::Listener
+    public juce::Slider::Listener,
+    public juce::Timer//slider
+
 {
 public:
     PlayerGUI();
@@ -15,6 +18,7 @@ public:
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
     void releaseResources();
     void paint(juce::Graphics& g) override;
+    void timerCallback() override;//slider
 
 private:
     PlayerAudio playerAudio;
@@ -28,6 +32,8 @@ private:
     juce::TextButton goEndButton{ ">|" };
     juce::TextButton loopButton{ "Loop: Off" };
     juce::TextButton muteButton{ "Mute" }; //  New Mute button
+    juce::Slider positionSlider; //slider
+    juce::Label timeLabel;//slider
 
     juce::Slider volumeSlider;
 

@@ -34,7 +34,18 @@ PlayerGUI::PlayerGUI()
     volumeSlider.setValue(0.5);
     volumeSlider.addListener(this);
     addAndMakeVisible(volumeSlider);
+    //slider
+    positionSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    positionSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    positionSlider.addListener(this);
+    addAndMakeVisible(positionSlider);
+    startTimer(500);//slider
+
+    addAndMakeVisible(timeLabel);
+    timeLabel.setText("0:00", juce::dontSendNotification);
+    timeLabel.setJustificationType(juce::Justification::centredLeft);
 }
+
 
 void PlayerGUI::resized()
 {
@@ -44,7 +55,9 @@ void PlayerGUI::resized()
     stopButton.setBounds(240, y, 80, 40);
     loopButton.setBounds(340, y, 100, 40);
     muteButton.setBounds(460, y, 80, 40); // 🔇 Mute button position
-
+    //slider
+    timeLabel.setBounds(20, 175, 100, 20);
+    positionSlider.setBounds(20, 150, getWidth() - 40, 20);
     playPauseButton.setBounds(20, 70, 80, 30);
     goStartButton.setBounds(120, 70, 80, 30);
     goEndButton.setBounds(220, 70, 80, 30);
@@ -160,4 +173,27 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
         else
             lastVolume = slider->getValue(); // update stored volume while muted
     }
+    //slider
+    if (slider == &volumeSlider) {
+        playerAudio.setGain(volumeSlider.getValue());
+    }
+    else if (slider == &positionSlider) {
+        playerAudio.setPosition(positionSlider.getValue());
+    }
+
+
+}
+//slider
+void PlayerGUI::timerCallback() { 
+    double currentPos = playerAudio.getPosition();
+        double totalLength = playerAudio.getLength();
+    if (playerAudio.getLength() > 0.0) {
+       
+        positionSlider.setRange(0.0, totalLength, 0.01);
+        positionSlider.setValue(currentPos, juce::dontSendNotification);
+    }
+    int minutes = static_cast<int>(currentPos) / 60;
+    int seconds = static_cast<int>(currentPos) % 60;
+    juce::String timeText = juce::String(minutes) + ":" + juce::String(seconds).paddedLeft('0', 2);
+    timeLabel.setText(timeText, juce::dontSendNotification);
 }
