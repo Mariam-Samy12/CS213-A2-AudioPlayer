@@ -34,7 +34,9 @@ private:
     juce::TextButton muteButton{ "Mute" }; //  New Mute button
     juce::Slider positionSlider; //slider
     juce::Label timeLabel;//slider
-
+    juce::TextButton setAButton{ "Set A" };//AB
+    juce::TextButton setBButton{ "Set B" };//AB
+    juce::TextButton clearABButton{ "Clear A-B" };//AB
     juce::Slider volumeSlider;
 
     std::unique_ptr<juce::FileChooser> fileChooser;
@@ -46,6 +48,8 @@ private:
     //  For mute state
     bool isMuted = false;
     double lastVolume = 0.5;
-
+    //AB
+    double loopPointA = -1.0;
+    double loopPointB = -1.0;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };
