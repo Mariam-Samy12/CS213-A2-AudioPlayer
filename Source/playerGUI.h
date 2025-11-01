@@ -51,5 +51,5 @@ juce::TextButton clearABButton{ "Clear A-B" }; //AB
 //AB
 double loopPointA = -1.0;
 double loopPointB = -1.0;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)//
 };
