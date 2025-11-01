@@ -121,6 +121,7 @@ PlayerGUI::~PlayerGUI()
 
 void PlayerGUI::buttonClicked(juce::Button* button)
 {
+    //pleaseeeeeee
     if (button == &loadButton)
     {
         fileChooser = std::make_unique<juce::FileChooser>(
