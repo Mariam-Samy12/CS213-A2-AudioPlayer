@@ -2,9 +2,11 @@
 #include <JuceHeader.h>
 #include "PlayerAudio.h"
 
-class PlayerGUI : public juce::Component,
+class PlayerGUI :
+    public juce::Component,
     public juce::Button::Listener,
-    public juce::Slider::Listener
+    public juce::Slider::Listener,
+    public juce::Timer //slider
 {
 public:
     PlayerGUI();
@@ -15,6 +17,7 @@ public:
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
     void releaseResources();
     void paint(juce::Graphics& g) override;
+void timerCallback() override; //slider
 
 private:
     PlayerAudio playerAudio;
@@ -28,7 +31,12 @@ private:
     juce::TextButton goEndButton{ ">|" };
     juce::TextButton loopButton{ "Loop: Off" };
     juce::TextButton muteButton{ "Mute" }; //  New Mute button
+juce::Slider positionSlider; //slider
+juce::Label timeLabel;       //slider
 
+juce::TextButton setAButton{ "Set A" };      //AB
+juce::TextButton setBButton{ "Set B" };      //AB
+juce::TextButton clearABButton{ "Clear A-B" }; //AB
     juce::Slider volumeSlider;
 
     std::unique_ptr<juce::FileChooser> fileChooser;
@@ -40,6 +48,8 @@ private:
     //  For mute state
     bool isMuted = false;
     double lastVolume = 0.5;
-
+//AB
+double loopPointA = -1.0;
+double loopPointB = -1.0;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };
