@@ -3,16 +3,20 @@
 void PlayerGUI::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
     playerAudio.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    
 }
 
 void PlayerGUI::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     playerAudio.getNextAudioBlock(bufferToFill);
+  
 }
 
 void PlayerGUI::releaseResources()
 {
     playerAudio.releaseResources();
+    
+
 }
 
 void PlayerGUI::paint(juce::Graphics& g)
@@ -53,6 +57,20 @@ for (auto* btn : { &setAButton, &setBButton }) {
 }
 clearABButton.addListener(this);
 addAndMakeVisible(clearABButton);
+// Track Markers
+addMarkerButton.addListener(this);
+addAndMakeVisible(addMarkerButton);
+
+markerList.onChange = [this]() {
+    int selectedIndex = markerList.getSelectedId() - 1;
+    if (selectedIndex >= 0 && selectedIndex < markers.size()) {
+        playerAudio.setPosition(markers[selectedIndex].timeInSeconds);
+        playerAudio.start();
+    }
+   
+    };
+addAndMakeVisible(markerList);
+
 }
 void PlayerGUI::resized()
 {
@@ -61,21 +79,29 @@ void PlayerGUI::resized()
     restartButton.setBounds(140, y, 80, 40);
     stopButton.setBounds(240, y, 80, 40);
     loopButton.setBounds(340, y, 100, 40);
-muteButton.setBounds(460, y, 80, 40); // 🔇 Mute button position
+muteButton.setBounds(460, y, 80, 40); //  Mute button position
 
 //slider
-timeLabel.setBounds(20, 235, 100, 20);
+timeLabel.setBounds(20, 240, 100, 20);
 positionSlider.setBounds(20, 210, getWidth() - 40, 20);
     playPauseButton.setBounds(20, 70, 80, 30);
     goStartButton.setBounds(120, 70, 80, 30);
     goEndButton.setBounds(220, 70, 80, 30);
 
-volumeSlider.setBounds(20, 170, getWidth() - 40, 30);
+volumeSlider.setBounds(20, 270, getWidth() - 40, 30);
 
 //AB
 setAButton.setBounds(20, 115, 80, 30);
 setBButton.setBounds(120, 115, 80, 30);
 clearABButton.setBounds(220, 115, 100, 30);
+// Track Markers
+addMarkerButton.setBounds(20, 160, 100, 30);
+markerList.setBounds(140, 160, 200, 30);
+//Focous mood
+addAndMakeVisible(playFromMiddleButton);
+playFromMiddleButton.setBounds(460, y, 80, 40);
+playFromMiddleButton.addListener(this);
+
 }
 
 PlayerGUI::~PlayerGUI()
@@ -88,9 +114,8 @@ void PlayerGUI::buttonClicked(juce::Button* button)
     {
         fileChooser = std::make_unique<juce::FileChooser>(
             "Select an audio file...",
-            juce::File{},
-            "*.wav;*.mp3;*.flac;*.aiff;*.aif;*.ogg;*.aac;*.mpeg"
-        );
+            juce::File::getSpecialLocation(juce::File::SpecialLocationType::userDesktopDirectory),
+            "*");
 
 
         fileChooser->launchAsync(
@@ -186,9 +211,26 @@ if (button == &clearABButton) {
     setAButton.setButtonText("Set A");
     setBButton.setButtonText("Set B");
 }
+// Track Markers
+if (button == &addMarkerButton)
+{
+    double currentTime = playerAudio.getPosition();
+    markerCount++;
+    juce::String label = "Marker " + juce::String(markerCount) + " (" +
+        juce::String((int)currentTime / 60) + ":" +
+        juce::String((int)currentTime % 60).paddedLeft('0', 2) + ")";
 
-            
-
+    markers.push_back({ currentTime, label });
+    markerList.addItem(label, markerCount);
+}
+//Focous mood
+if (button == &playFromMiddleButton)
+{
+    double length = playerAudio.getLength(); 
+    double middle = length / 2.0;
+    playerAudio.setPosition(middle); 
+    playerAudio.start();
+}
 
 }
 
