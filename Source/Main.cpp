@@ -43,6 +43,6 @@ private:
 
     std::unique_ptr<MainWindow> mainWindow;
 };
-
+//MERGE
 // This macro starts the app
 START_JUCE_APPLICATION(SimpleAudioPlayer)
