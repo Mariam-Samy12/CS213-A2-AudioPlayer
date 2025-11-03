@@ -57,6 +57,13 @@ for (auto* btn : { &setAButton, &setBButton }) {
 }
 clearABButton.addListener(this);
 addAndMakeVisible(clearABButton);
+//play list
+addAndMakeVisible(addToPlaylistButton);
+addAndMakeVisible(playlistBox);
+addAndMakeVisible(playSelectedButton);
+
+addToPlaylistButton.addListener(this);
+playSelectedButton.addListener(this);
 // Track Markers
 addMarkerButton.addListener(this);
 addAndMakeVisible(addMarkerButton);
@@ -82,13 +89,14 @@ void PlayerGUI::resized()
 muteButton.setBounds(460, y, 80, 40); //  Mute button position
 
 //slider
-timeLabel.setBounds(20, 240, 100, 20);
-positionSlider.setBounds(20, 210, getWidth() - 40, 20);
+timeLabel.setBounds(20, 240, 100, 20);            
+positionSlider.setBounds(70, 240, 510, 20);
+
     playPauseButton.setBounds(20, 70, 80, 30);
     goStartButton.setBounds(120, 70, 80, 30);
     goEndButton.setBounds(220, 70, 80, 30);
 
-volumeSlider.setBounds(20, 270, getWidth() - 40, 30);
+    volumeSlider.setBounds(20, 270, 560, 20);
 
 //AB
 setAButton.setBounds(20, 115, 80, 30);
@@ -101,7 +109,10 @@ markerList.setBounds(140, 160, 200, 30);
 addAndMakeVisible(playFromMiddleButton);
 playFromMiddleButton.setBounds(460, y, 80, 40);
 playFromMiddleButton.addListener(this);
-
+//play list
+addToPlaylistButton.setBounds(10, 210, 150, 30);
+playlistBox.setBounds(170, 210, 200, 30);
+playSelectedButton.setBounds(380, 210, 150, 30);
 }
 
 PlayerGUI::~PlayerGUI()
@@ -231,7 +242,31 @@ if (button == &playFromMiddleButton)
     playerAudio.setPosition(middle); 
     playerAudio.start();
 }
-
+//play list
+if (button == &addToPlaylistButton)
+{
+    fileChooser = std::make_unique<juce::FileChooser>("Select Audio Files", juce::File{}, "*.wav;*.mp3");
+    fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectMultipleItems,
+        [this](const juce::FileChooser& chooser)
+        {
+            auto files = chooser.getResults();
+            for (auto& file : files)
+            {
+                playlist.push_back(file);
+                playlistBox.addItem(file.getFileName(), playlistBox.getNumItems() + 1);
+            }
+        });
+}
+else if (button == &playSelectedButton)
+{
+    int selectedIndex = playlistBox.getSelectedItemIndex();
+    if (selectedIndex >= 0 && selectedIndex < playlist.size())
+    {
+        playerAudio.stop();
+        playerAudio.loadFile(playlist[selectedIndex]);
+        playerAudio.start();
+    }
+}
 }
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)

@@ -49,8 +49,12 @@ juce::TextButton addMarkerButton{ "Add Marker" };// Track Markers
 juce::ComboBox markerList;// Track Markers
 juce::TextButton playFromMiddleButton{ " From Middle " };//Focous mood
     std::unique_ptr<juce::FileChooser> fileChooser;
-
-    // Event handlers
+    //play list
+    std::vector<juce::File> playlist;               
+    juce::ComboBox playlistBox;                     
+    juce::TextButton addToPlaylistButton{ "Add to Playlist" };  
+    juce::TextButton playSelectedButton{ "Play Selected" };    
+        // Event handlers
     void buttonClicked(juce::Button* button) override;
     void sliderValueChanged(juce::Slider* slider) override;
 
