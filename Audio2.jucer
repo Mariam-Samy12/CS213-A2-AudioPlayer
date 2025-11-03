@@ -35,17 +35,17 @@
         <CONFIGURATION isDebug="0" name="Release" targetName="Audio2"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_utils" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_core" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_events" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
       </MODULEPATHS>
     </VS2022>
     <VS2022 targetFolder="Builds/VisualStudio2022_1">
@@ -54,17 +54,17 @@
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_processors" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../Downloads/juce-8.0.10-windows/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_devices" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_formats" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_processors" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_audio_utils" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_core" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_data_structures" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_events" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_graphics" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
+        <MODULEPATH id="juce_gui_extra" path="..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules"/>
       </MODULEPATHS>
     </VS2022>
   </EXPORTFORMATS>

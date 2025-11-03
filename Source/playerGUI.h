@@ -1,10 +1,11 @@
-﻿#pragma once
+#pragma once
 #include <JuceHeader.h>
-#include "PlayerAudio.h"
+#include "playerAudio.h"
 
 class PlayerGUI : public juce::Component,
     public juce::Button::Listener,
-    public juce::Slider::Listener
+    public juce::Slider::Listener,
+    public juce::Timer
 {
 public:
     PlayerGUI();
@@ -15,11 +16,11 @@ public:
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
     void releaseResources();
     void paint(juce::Graphics& g) override;
+    void timerCallback() override;
 
 private:
     PlayerAudio playerAudio;
 
-    // GUI elements
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
     juce::TextButton stopButton{ "Stop" };
@@ -27,17 +28,18 @@ private:
     juce::TextButton goStartButton{ "|<" };
     juce::TextButton goEndButton{ ">|" };
     juce::TextButton loopButton{ "Loop: Off" };
-    juce::TextButton muteButton{ "Mute" }; //  New Mute button
+    juce::TextButton muteButton{ "Mute" };
 
+    juce::Slider speedSlider;
     juce::Slider volumeSlider;
+    juce::Slider positionSlider;
+    juce::Label timeLabel;
 
     std::unique_ptr<juce::FileChooser> fileChooser;
 
-    // Event handlers
     void buttonClicked(juce::Button* button) override;
     void sliderValueChanged(juce::Slider* slider) override;
 
-    //  For mute state
     bool isMuted = false;
     double lastVolume = 0.5;
 
