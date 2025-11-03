@@ -3,16 +3,20 @@
 void PlayerGUI::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
     playerAudio.prepareToPlay(samplesPerBlockExpected, sampleRate);
+    
 }
 
 void PlayerGUI::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
     playerAudio.getNextAudioBlock(bufferToFill);
+  
 }
 
 void PlayerGUI::releaseResources()
 {
     playerAudio.releaseResources();
+    
+
 }
 
 void PlayerGUI::paint(juce::Graphics& g)
@@ -63,6 +67,7 @@ markerList.onChange = [this]() {
         playerAudio.setPosition(markers[selectedIndex].timeInSeconds);
         playerAudio.start();
     }
+   
     };
 addAndMakeVisible(markerList);
 
@@ -74,7 +79,7 @@ void PlayerGUI::resized()
     restartButton.setBounds(140, y, 80, 40);
     stopButton.setBounds(240, y, 80, 40);
     loopButton.setBounds(340, y, 100, 40);
-muteButton.setBounds(460, y, 80, 40); // 🔇 Mute button position
+muteButton.setBounds(460, y, 80, 40); //  Mute button position
 
 //slider
 timeLabel.setBounds(20, 240, 100, 20);
@@ -92,6 +97,10 @@ clearABButton.setBounds(220, 115, 100, 30);
 // Track Markers
 addMarkerButton.setBounds(20, 160, 100, 30);
 markerList.setBounds(140, 160, 200, 30);
+//Focous mood
+addAndMakeVisible(playFromMiddleButton);
+playFromMiddleButton.setBounds(460, y, 80, 40);
+playFromMiddleButton.addListener(this);
 
 }
 
@@ -214,9 +223,14 @@ if (button == &addMarkerButton)
     markers.push_back({ currentTime, label });
     markerList.addItem(label, markerCount);
 }
-
-
-            
+//Focous mood
+if (button == &playFromMiddleButton)
+{
+    double length = playerAudio.getLength(); 
+    double middle = length / 2.0;
+    playerAudio.setPosition(middle); 
+    playerAudio.start();
+}
 
 }
 

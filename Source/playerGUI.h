@@ -47,7 +47,7 @@ juce::TextButton clearABButton{ "Clear A-B" }; //AB
 juce::Slider volumeSlider;
 juce::TextButton addMarkerButton{ "Add Marker" };// Track Markers
 juce::ComboBox markerList;// Track Markers
-
+juce::TextButton playFromMiddleButton{ " From Middle " };//Focous mood
     std::unique_ptr<juce::FileChooser> fileChooser;
 
     // Event handlers
