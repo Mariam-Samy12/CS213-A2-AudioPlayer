@@ -1,11 +1,12 @@
-#pragma once
+﻿#pragma once
 #include <JuceHeader.h>
-#include "playerAudio.h"
+#include "PlayerAudio.h"
 
-class PlayerGUI : public juce::Component,
+class PlayerGUI :
+    public juce::Component,
     public juce::Button::Listener,
     public juce::Slider::Listener,
-    public juce::Timer
+    public juce::Timer //slider
 {
 public:
     PlayerGUI();
@@ -16,17 +17,19 @@ public:
     void getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill);
     void releaseResources();
     void paint(juce::Graphics& g) override;
-    void timerCallback() override;
+    void timerCallback() override; //slider
+    // Track Markers
+    struct Marker {
+        double timeInSeconds;
+        juce::String label;
+    };
 
+    std::vector<Marker> markers;
+    int markerCount = 0;
 private:
     PlayerAudio playerAudio;
-    //play list
-std::vector<juce::File> playlist;
-juce::ComboBox playlistBox;
-juce::TextButton addToPlaylistButton{ "Add to Playlist" };
-juce::TextButton playSelectedButton{ "Play Selected" };
-// Event handlers
 
+    // GUI elements
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
     juce::TextButton stopButton{ "Stop" };
@@ -34,20 +37,32 @@ juce::TextButton playSelectedButton{ "Play Selected" };
     juce::TextButton goStartButton{ "|<" };
     juce::TextButton goEndButton{ ">|" };
     juce::TextButton loopButton{ "Loop: Off" };
-    juce::TextButton muteButton{ "Mute" };
+    juce::TextButton muteButton{ "Mute" }; //  New Mute button
+juce::Slider positionSlider; //slider
+juce::Label timeLabel;       //slider
 
-    juce::Slider speedSlider;
-    juce::Slider volumeSlider;
-    juce::Slider positionSlider;
-    juce::Label timeLabel;
-
+juce::TextButton setAButton{ "Set A" };      //AB
+juce::TextButton setBButton{ "Set B" };      //AB
+juce::TextButton clearABButton{ "Clear A-B" }; //AB
+juce::Slider volumeSlider;
+juce::TextButton addMarkerButton{ "Add Marker" };// Track Markers
+juce::ComboBox markerList;// Track Markers
+juce::TextButton playFromMiddleButton{ " From Middle " };//Focous mood
     std::unique_ptr<juce::FileChooser> fileChooser;
-
+    //play list
+    std::vector<juce::File> playlist;               
+    juce::ComboBox playlistBox;                     
+    juce::TextButton addToPlaylistButton{ "Add to Playlist" };  
+    juce::TextButton playSelectedButton{ "Play Selected" };    
+        // Event handlers
     void buttonClicked(juce::Button* button) override;
     void sliderValueChanged(juce::Slider* slider) override;
 
+    //  For mute state
     bool isMuted = false;
     double lastVolume = 0.5;
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
+//AB
+double loopPointA = -1.0;
+double loopPointB = -1.0;
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)//
 };
