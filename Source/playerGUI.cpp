@@ -187,3 +187,20 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
 }
 
 
+if (playerAudio.getLength() > 0.0) {
+    positionSlider.setRange(0.0, totalLength, 0.01);
+    positionSlider.setValue(currentPos, juce::dontSendNotification);
+}
+
+int minutes = static_cast<int>(currentPos) / 60;
+int seconds = static_cast<int>(currentPos) % 60;
+juce::String timeText = juce::String(minutes) + ":" + juce::String(seconds).paddedLeft('0', 2);
+timeLabel.setText(timeText, juce::dontSendNotification);
+
+//AB
+if (loopPointA >= 0.0 && loopPointB > loopPointA) {
+    if (currentPos >= loopPointB) {
+        playerAudio.setPosition(loopPointA);
+    }
+}
+}////
