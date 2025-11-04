@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <JuceHeader.h>
 
 class PlayerAudio
@@ -20,19 +20,33 @@ public:
     double getPosition() const;
     double getLength() const;
 
-    void setLooping(bool shouldLoop); // LOOP
-    bool getLooping() const { return isLooping; } // LOOP
+    void setLooping(bool shouldLoop);
+    bool getLooping() const { return isLooping; }
 
-    // ?? Mute controls
     void setMuted(bool shouldMute);
     bool getMuted() const { return isMuted; }
+
+    // 🟢 Metadata getters
+    juce::String getTitle() const { return title; }
+    juce::String getArtist() const { return artist; }
+    juce::String getAlbum() const { return album; }
+    juce::String getFileName() const { return fileName; }
+    double getDuration() const { return duration; }
 
 private:
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
     juce::AudioTransportSource transportSource;
 
-    bool isLooping = false;  // LOOP
-    bool isMuted = false;    // ??
-    float lastGain = 0.5f;   // ?? store previous volume when muted
+    bool isLooping = false;
+    bool isMuted = false;
+    float lastGain = 0.5f;
+
+    // 🟢 Metadata info
+    juce::String title, artist, album, fileName;
+    double duration = 0.0;
+
+    void loadMetadata(const juce::File& file);
 };
+
+

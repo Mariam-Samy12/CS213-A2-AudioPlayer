@@ -2808,6 +2808,7 @@
     <ClCompile Include="..\..\..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules\juce_gui_extra\juce_gui_extra.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_devices.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_formats.cpp"/>
@@ -2837,6 +2838,7 @@
     <ClInclude Include="..\..\Source\playerAudio.h"/>
     <ClInclude Include="..\..\Source\playerGUI.h"/>
     <ClInclude Include="..\..\Source\MainComponent.h"/>
+
     <ClInclude Include="..\..\..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h"/>
     <ClInclude Include="..\..\..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="..\..\..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>
@@ -4157,6 +4159,7 @@
     <None Include="..\..\..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules\juce_graphics\image_formats\jpglib\changes to libjpeg for JUCE.txt"/>
     <None Include="..\..\..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules\juce_graphics\image_formats\pnglib\libpng_readme.txt"/>
     <None Include="..\..\..\..\..\..\Downloads\juce\juce-framework-JUCE-d6181bd\modules\juce_graphics\unicode\sheenbidi\JUCE_CHANGES.txt"/>
+
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include=".\resources.rc"/>
