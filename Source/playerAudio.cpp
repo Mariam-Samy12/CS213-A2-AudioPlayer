@@ -1,19 +1,11 @@
-
 ﻿#include "PlayerAudio.h"
-#include <taglib/fileref.h>
-#include <taglib/tag.h>
-
 
 PlayerAudio::PlayerAudio()
 {
     formatManager.registerBasicFormats();
 }
 
-
-PlayerAudio::~PlayerAudio()
-{
-}
-
+PlayerAudio::~PlayerAudio() {}
 
 void PlayerAudio::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
@@ -24,9 +16,7 @@ void PlayerAudio::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
 {
     transportSource.getNextAudioBlock(bufferToFill);
 
-
-    // LOOP handling
-
+    // ✅ LOOP handling
     if (isLooping && !transportSource.isPlaying() && transportSource.getCurrentPosition() >= getLength())
     {
         transportSource.setPosition(0.0);
@@ -45,25 +35,20 @@ bool PlayerAudio::loadFile(const juce::File& file)
     {
         if (auto* reader = formatManager.createReaderFor(file))
         {
-
-            // Disconnect old source
-
             transportSource.stop();
 
             readerSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
-
 
             transportSource.setSource(readerSource.get(), 0, nullptr, reader->sampleRate);
 
             loadMetadata(file);
 
-
             transportSource.start();
+            return true;
         }
     }
-    return true;
+    return false;
 }
-
 
 void PlayerAudio::start() { transportSource.start(); }
 void PlayerAudio::stop() { transportSource.stop(); }
@@ -76,7 +61,6 @@ void PlayerAudio::setGain(float gain)
         lastGain = gain;
     }
 }
-
 
 void PlayerAudio::setPosition(double pos)
 {
@@ -98,50 +82,52 @@ void PlayerAudio::setLooping(bool shouldLoop)
     isLooping = shouldLoop;
 }
 
-
-//  Mute/Unmute
-
 void PlayerAudio::setMuted(bool shouldMute)
 {
     if (shouldMute && !isMuted)
     {
         lastGain = transportSource.getGain();
-
         transportSource.setGain(0.0f);
-
     }
     else if (!shouldMute && isMuted)
     {
         transportSource.setGain(lastGain);
-
     }
     isMuted = shouldMute;
 }
 
-// 🟢 Load Metadata
+// 🟢 Load Metadata using JUCE only
 void PlayerAudio::loadMetadata(const juce::File& file)
 {
-    TagLib::FileRef f(file.getFullPathName().toRawUTF8());
-    if (!f.isNull() && f.tag())
+    // Store filename
+    fileName = file.getFileNameWithoutExtension();
+
+    // Get duration from transport source
+    duration = getLength();
+
+    // Try to read metadata from file using JUCE
+    if (auto* reader = formatManager.createReaderFor(file))
     {
-        TagLib::Tag* tag = f.tag();
-        title = juce::String::fromUTF8(tag->title().toCString(true));
-        artist = juce::String::fromUTF8(tag->artist().toCString(true));
-        album = juce::String::fromUTF8(tag->album().toCString(true));
-        year = tag->year();
+        // Get metadata from reader
+        auto metadata = reader->metadataValues;
+
+        // Extract common metadata keys
+        title = metadata.getValue("title", fileName);
+        artist = metadata.getValue("artist", "Unknown Artist");
+        album = metadata.getValue("album", "Unknown Album");
+
+        // If title is empty, use filename
+        if (title.isEmpty())
+            title = fileName;
+
+        delete reader;
     }
     else
     {
-        title = file.getFileNameWithoutExtension();
+        // Fallback if no metadata found
+        title = fileName;
         artist = "Unknown Artist";
         album = "Unknown Album";
-        year = 0;
-    }
-
-    if (f.audioProperties())
-    {
-        auto* props = f.audioProperties();
-        duration = props->length();
     }
 }
 
