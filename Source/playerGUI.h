@@ -54,6 +54,8 @@ juce::TextButton playFromMiddleButton{ " From Middle " };//Focous mood
     juce::ComboBox playlistBox;                     
     juce::TextButton addToPlaylistButton{ "Add to Playlist" };  
     juce::TextButton playSelectedButton{ "Play Selected" };    
+    juce::TextButton clearPlaylistButton{ "Clear Playlist" };
+    juce::TextButton removeSelectedButton{ "Remove Selected" };
         // Event handlers
     void buttonClicked(juce::Button* button) override;
     void sliderValueChanged(juce::Slider* slider) override;

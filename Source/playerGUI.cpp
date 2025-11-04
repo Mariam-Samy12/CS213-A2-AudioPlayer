@@ -61,6 +61,11 @@ PlayerGUI::PlayerGUI()
     addAndMakeVisible(addToPlaylistButton);
     addAndMakeVisible(playlistBox);
     addAndMakeVisible(playSelectedButton);
+    addAndMakeVisible(clearPlaylistButton);
+    addAndMakeVisible(removeSelectedButton);
+    clearPlaylistButton.addListener(this);
+    removeSelectedButton.addListener(this);
+
 
     addToPlaylistButton.addListener(this);
     playSelectedButton.addListener(this);
@@ -89,14 +94,16 @@ void PlayerGUI::resized()
     muteButton.setBounds(460, y, 80, 40); //  Mute button position
 
     //slider
-    timeLabel.setBounds(20, 240, 100, 20);
-    positionSlider.setBounds(70, 240, 510, 20);
+   
+    timeLabel.setBounds(20, 280, 60, 20);              // الوقت على الشمال
+    positionSlider.setBounds(90, 280, 490, 20);        // الشريط على يمين الوقت
+    volumeSlider.setBounds(20, 310, 560, 20);          // شريط الصوت تحتهم   // شريط الصوت تحتهم
 
     playPauseButton.setBounds(20, 70, 80, 30);
     goStartButton.setBounds(120, 70, 80, 30);
     goEndButton.setBounds(220, 70, 80, 30);
 
-    volumeSlider.setBounds(20, 270, 560, 20);
+   
 
     //AB
     setAButton.setBounds(20, 115, 80, 30);
@@ -110,9 +117,18 @@ void PlayerGUI::resized()
     playFromMiddleButton.setBounds(460, y, 80, 40);
     playFromMiddleButton.addListener(this);
     //play list
-    addToPlaylistButton.setBounds(10, 210, 150, 30);
-    playlistBox.setBounds(170, 210, 200, 30);
-    playSelectedButton.setBounds(380, 210, 150, 30);
+
+    playlistBox.setBounds(20, 240, 200, 30);
+    addToPlaylistButton.setBounds(230, 240, 100, 30);
+    playSelectedButton.setBounds(340, 240, 100, 30);
+    removeSelectedButton.setBounds(450, 240, 100, 30);
+    clearPlaylistButton.setBounds(560, 240, 100, 30);
+
+    addAndMakeVisible(addToPlaylistButton);
+    addAndMakeVisible(playlistBox);
+    addAndMakeVisible(playSelectedButton);
+    addAndMakeVisible(clearPlaylistButton);
+    addAndMakeVisible(removeSelectedButton);
 }
 
 PlayerGUI::~PlayerGUI()
@@ -267,7 +283,28 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             playerAudio.start();
         }
     }
+    //play list 2
+    if (button == &clearPlaylistButton)
+    {
+        playlist.clear();
+        playlistBox.clear();
+    }
+    if (button == &removeSelectedButton)
+    {
+        int selectedIndex = playlistBox.getSelectedItemIndex();
+        if (selectedIndex >= 0 && selectedIndex < playlist.size())
+        {
+            playlist.erase(playlist.begin() + selectedIndex);
+
+            playlistBox.clear();
+            for (int i = 0; i < playlist.size(); ++i)
+            {
+                playlistBox.addItem(playlist[i].getFileName(), i + 1);
+            }
+        }
+    }
 }
+
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)
 {
@@ -283,6 +320,8 @@ void PlayerGUI::sliderValueChanged(juce::Slider* slider)
     {
         playerAudio.setPosition(positionSlider.getValue());
     }
+    
+
 
 
 
