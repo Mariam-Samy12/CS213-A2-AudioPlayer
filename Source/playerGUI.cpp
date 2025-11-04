@@ -102,7 +102,6 @@ void PlayerGUI::resized()
     playPauseButton.setBounds(20, 70, 80, 30);
     goStartButton.setBounds(120, 70, 80, 30);
     goEndButton.setBounds(220, 70, 80, 30);
-    infoLabel.setBounds(20, 160, getWidth() - 40, 60);//5
 
    
 
@@ -154,7 +153,6 @@ void PlayerGUI::buttonClicked(juce::Button* button)
                 if (file.existsAsFile())
                     playerAudio.loadFile(file);
             });
-
     }
 
     if (button == &restartButton)
