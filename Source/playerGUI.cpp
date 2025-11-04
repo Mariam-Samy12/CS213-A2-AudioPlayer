@@ -337,21 +337,15 @@ void PlayerGUI::timerCallback() {
         positionSlider.setValue(currentPos, juce::dontSendNotification);
     }
 
-int minutes = static_cast<int>(currentPos) / 60;
-int seconds = static_cast<int>(currentPos) % 60;
-juce::String timeText = juce::String(minutes) + ":" + juce::String(seconds).paddedLeft('0', 2);
-timeLabel.setText(timeText, juce::dontSendNotification);
+    int minutes = static_cast<int>(currentPos) / 60;
+    int seconds = static_cast<int>(currentPos) % 60;
+    juce::String timeText = juce::String(minutes) + ":" + juce::String(seconds).paddedLeft('0', 2);
+    timeLabel.setText(timeText, juce::dontSendNotification);
 
-//AB
-if (loopPointA >= 0.0 && loopPointB > loopPointA) {
-    if (currentPos >= loopPointB) {
-        playerAudio.setPosition(loopPointA);
+    //AB
+    if (loopPointA >= 0.0 && loopPointB > loopPointA) {
+        if (currentPos >= loopPointB) {
+            playerAudio.setPosition(loopPointA);
+        }
     }
-}
-
-// auto-save playback position
-juce::File lastFile;
-double savedPos = 0.0;
-if (playerAudio.loadSession(lastFile, savedPos))
-    playerAudio.saveSession(lastFile, playerAudio.getPosition());
 }
