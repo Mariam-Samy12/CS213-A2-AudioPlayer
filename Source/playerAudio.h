@@ -1,3 +1,4 @@
+
 ﻿#pragma once
 #include <JuceHeader.h>
 
@@ -20,6 +21,7 @@ public:
     double getPosition() const;
     double getLength() const;
 
+
     void setLooping(bool shouldLoop);
     bool getLooping() const { return isLooping; }
 
@@ -33,10 +35,12 @@ public:
     int getYear() const { return year; }
     double getDuration() const { return duration; }
 
+
 private:
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
     juce::AudioTransportSource transportSource;
+
 
     bool isLooping = false;
     bool isMuted = false;
@@ -49,4 +53,5 @@ private:
 
     void loadMetadata(const juce::File& file);
 };
+
 
