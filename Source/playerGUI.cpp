@@ -221,4 +221,4 @@ void PlayerGUI::timerCallback()
     double savedPos = 0.0;
     if (playerAudio.loadSession(lastFile, savedPos))
         playerAudio.saveSession(lastFile, playerAudio.getPosition());
-}
+}//س
