@@ -3475,6 +3475,9 @@
     <ClCompile Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_gui_extra\juce_gui_extra.mm">
       <Filter>JUCE Modules\juce_gui_extra</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
+      <Filter>JUCE Library Code</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp">
       <Filter>JUCE Library Code</Filter>
     </ClCompile>
@@ -7422,11 +7425,38 @@
     <ClInclude Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_gui_extra\juce_gui_extra.h">
       <Filter>JUCE Modules\juce_gui_extra</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
+      <Filter>JUCE Library Code</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>JUCE Library Code</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\10 backward.png">
+      <Filter>Audio2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\10 forward.png">
+      <Filter>Audio2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\backward.png">
+      <Filter>Audio2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\forward.png">
+      <Filter>Audio2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\pause.png">
+      <Filter>Audio2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\play.png">
+      <Filter>Audio2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\restart.png">
+      <Filter>Audio2</Filter>
+    </None>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\stop.png">
+      <Filter>Audio2</Filter>
+    </None>
     <None Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_audio_devices\native\oboe\src\common\README.md">
       <Filter>JUCE Modules\juce_audio_devices\native\oboe\src\common</Filter>
     </None>

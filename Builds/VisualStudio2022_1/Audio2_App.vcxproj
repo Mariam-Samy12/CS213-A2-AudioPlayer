@@ -2817,6 +2817,7 @@
     <ClCompile Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_gui_extra\juce_gui_extra.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_basics.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_devices.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_audio_formats.cpp"/>
@@ -4142,9 +4143,18 @@
     <ClInclude Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_gui_extra\misc\juce_WebControlRelays.h"/>
     <ClInclude Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_gui_extra\native\juce_NSViewFrameWatcher_mac.h"/>
     <ClInclude Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_gui_extra\juce_gui_extra.h"/>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\10 backward.png"/>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\10 forward.png"/>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\backward.png"/>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\forward.png"/>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\pause.png"/>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\play.png"/>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\restart.png"/>
+    <None Include="..\..\..\..\..\Desktop\CS213-A2-AudioPlayer\Images1\stop.png"/>
     <None Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_audio_devices\native\oboe\src\common\README.md"/>
     <None Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_audio_devices\native\oboe\src\flowgraph\resampler\README.md"/>
     <None Include="..\..\..\..\..\Downloads\juce-8.0.10-windows\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt"/>
