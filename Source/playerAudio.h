@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <JuceHeader.h>
 
 class PlayerAudio
@@ -26,11 +26,11 @@ public:
     void setMuted(bool shouldMute);
     bool getMuted() const { return isMuted; }
 
-    // 🟢 Metadata getters
+    
     juce::String getTitle() const { return title; }
     juce::String getArtist() const { return artist; }
     juce::String getAlbum() const { return album; }
-    juce::String getFileName() const { return fileName; }
+    int getYear() const { return year; }
     double getDuration() const { return duration; }
 
 private:
@@ -42,11 +42,9 @@ private:
     bool isMuted = false;
     float lastGain = 0.5f;
 
-    // 🟢 Metadata info
-    juce::String title, artist, album, fileName;
+    juce::String title, artist, album;
+    int year = 0;
     double duration = 0.0;
 
     void loadMetadata(const juce::File& file);
 };
-
-
