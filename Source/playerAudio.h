@@ -12,39 +12,32 @@ public:
     void releaseResources();
 
     bool loadFile(const juce::File& file);
-    void stop();
     void start();
+    void stop();
 
     void setGain(float gain);
     void setPosition(double pos);
     double getPosition() const;
     double getLength() const;
 
+    void setSpeed(double ratio);
     void setLooping(bool shouldLoop);
     bool getLooping() const { return isLooping; }
 
     void setMuted(bool shouldMute);
     bool getMuted() const { return isMuted; }
 
-    
-    juce::String getTitle() const { return title; }
-    juce::String getArtist() const { return artist; }
-    juce::String getAlbum() const { return album; }
-    int getYear() const { return year; }
-    double getDuration() const { return duration; }
+    void saveSession(const juce::File& file, double position);
+    bool loadSession(juce::File& file, double& position);
 
 private:
+    juce::CriticalSection lock;
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
     juce::AudioTransportSource transportSource;
+    juce::ResamplingAudioSource resampleSource{ &transportSource, false, 2 };
 
     bool isLooping = false;
     bool isMuted = false;
     float lastGain = 0.5f;
-
-    juce::String title, artist, album;
-    int year = 0;
-    double duration = 0.0;
-
-    void loadMetadata(const juce::File& file);
 };
