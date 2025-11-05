@@ -44,4 +44,4 @@ private:
     double lastVolume = 0.5;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
-};
+};//
