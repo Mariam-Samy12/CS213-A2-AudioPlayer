@@ -20,26 +20,11 @@ void PlayerGUI::paint(juce::Graphics& g)
     g.fillAll(juce::Colour(25, 25, 25)); // 🌑 Dark background
 }
 
-PlayerGUI::PlayerGUI(){
-    // 🖼️ تحميل الصور من ملفات خارجية
-    juce::File playFile("C:/Users/Yara/Downloads/play.png");
-    juce::File pauseFile("C:/Users/Yara/Downloads/pause.png");
-
-    playIcon = juce::ImageFileFormat::loadFrom(playFile);
-    pauseIcon = juce::ImageFileFormat::loadFrom(pauseFile);
-
-    // 🎮 إعداد زرار Play بصورة
-    if (playIcon.isValid())
-        playPauseButton.setImages(true, true, true, playIcon, 1.0f, {}, playIcon, 1.0f, {}, playIcon, 1.0f, {});
-    else
-        DBG("فشل تحميل صورة Play");
-
-    addAndMakeVisible(playPauseButton);
-    playPauseButton.addListener(this);
-
-    for (juce::Button* btn : { &loadButton, &restartButton, &stopButton,
-                           &goStartButton, &goEndButton, &loopButton, &muteButton,
-                           &forwardButton, &backwardButton })
+PlayerGUI::PlayerGUI()
+{
+    for (auto* btn : { &loadButton, &restartButton, &stopButton, &playPauseButton,
+                       &goStartButton, &goEndButton, &loopButton, &muteButton,
+                       &forwardButton, &backwardButton })
     {
         btn->addListener(this);
         addAndMakeVisible(btn);
@@ -55,6 +40,48 @@ PlayerGUI::PlayerGUI(){
     infoLabel.setColour(juce::Label::textColourId, juce::Colours::white);
     infoLabel.setFont(juce::Font(16.0f));
     infoLabel.setText("No file loaded", juce::dontSendNotification);
+    //slider
+    positionSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    positionSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
+    positionSlider.addListener(this);
+    addAndMakeVisible(positionSlider);
+    startTimer(500); 
+
+    addAndMakeVisible(timeLabel);
+    timeLabel.setText("0:00", juce::dontSendNotification);
+    timeLabel.setJustificationType(juce::Justification::centredLeft);//slider
+    //AB
+    for (auto* btn : { &setAButton, &setBButton }) {
+        btn->addListener(this);
+        addAndMakeVisible(btn);
+    }
+    clearABButton.addListener(this);
+    addAndMakeVisible(clearABButton);
+    //play list
+    addAndMakeVisible(addToPlaylistButton);
+    addAndMakeVisible(playlistBox);
+    addAndMakeVisible(playSelectedButton);
+    addAndMakeVisible(clearPlaylistButton);
+    addAndMakeVisible(removeSelectedButton);
+    clearPlaylistButton.addListener(this);
+    removeSelectedButton.addListener(this);
+
+
+    addToPlaylistButton.addListener(this);
+    playSelectedButton.addListener(this);
+    // Track Markers
+    addMarkerButton.addListener(this);
+    addAndMakeVisible(addMarkerButton);
+
+    markerList.onChange = [this]() {
+        int selectedIndex = markerList.getSelectedId() - 1;
+        if (selectedIndex >= 0 && selectedIndex < markers.size()) {
+            playerAudio.setPosition(markers[selectedIndex].timeInSeconds);
+            playerAudio.start();
+        }
+
+        };
+    addAndMakeVisible(markerList);
 }
 
 void PlayerGUI::resized()
@@ -66,14 +93,50 @@ void PlayerGUI::resized()
     loopButton.setBounds(310, y, 100, 40);
     muteButton.setBounds(420, y, 80, 40);
 
-    playPauseButton.setBounds(20, 70, 64, 64); // حسب حجم الصورة
+    playPauseButton.setBounds(20, 70, 80, 30);
     goStartButton.setBounds(120, 70, 80, 30);
     goEndButton.setBounds(220, 70, 80, 30);
     forwardButton.setBounds(320, 70, 80, 30);
     backwardButton.setBounds(420, 70, 80, 30);
 
     volumeSlider.setBounds(20, 110, getWidth() - 40, 30);
-    infoLabel.setBounds(20, 150, getWidth() - 40, 40);
+    infoLabel.setBounds(20, 335, getWidth() - 40, 40);
+    //slider
+
+    timeLabel.setBounds(20, 245, 60, 20);              
+    positionSlider.setBounds(90, 245, 490, 20);       
+    volumeSlider.setBounds(20, 285, 560, 20);          
+
+    playPauseButton.setBounds(20, 70, 80, 30);
+    goStartButton.setBounds(120, 70, 80, 30);
+    goEndButton.setBounds(220, 70, 80, 30);
+
+
+
+    //AB
+    setAButton.setBounds(20, 115, 80, 30);
+    setBButton.setBounds(120, 115, 80, 30);
+    clearABButton.setBounds(220, 115, 100, 30);
+    // Track Markers
+    addMarkerButton.setBounds(20, 160, 100, 30);
+    markerList.setBounds(140, 160, 200, 30);
+    //Focous mood
+    addAndMakeVisible(playFromMiddleButton);
+    playFromMiddleButton.setBounds(520, y, 80, 40);
+    playFromMiddleButton.addListener(this);
+    //play list
+
+    playlistBox.setBounds(20, 205, 200, 30);
+    addToPlaylistButton.setBounds(230, 205, 100, 30);
+    playSelectedButton.setBounds(340, 205, 100, 30);
+    removeSelectedButton.setBounds(450, 205, 100, 30);
+    clearPlaylistButton.setBounds(560, 205, 100, 30);
+
+    addAndMakeVisible(addToPlaylistButton);
+    addAndMakeVisible(playlistBox);
+    addAndMakeVisible(playSelectedButton);
+    addAndMakeVisible(clearPlaylistButton);
+    addAndMakeVisible(removeSelectedButton);
 }
 
 PlayerGUI::~PlayerGUI() {}
@@ -117,23 +180,20 @@ void PlayerGUI::buttonClicked(juce::Button* button)
         playerAudio.stop();
         playerAudio.setPosition(0.0);
     }
+
     if (button == &playPauseButton)
     {
         static bool isPlaying = false;
-
         if (isPlaying)
         {
             playerAudio.stop();
-            if (playIcon.isValid())
-                playPauseButton.setImages(true, true, true, playIcon, 1.0f, {}, playIcon, 1.0f, {}, playIcon, 1.0f, {});
+            playPauseButton.setButtonText("Play");
         }
         else
         {
             playerAudio.start();
-            if (pauseIcon.isValid())
-                playPauseButton.setImages(true, true, true, pauseIcon, 1.0f, {}, pauseIcon, 1.0f, {}, pauseIcon, 1.0f, {});
+            playPauseButton.setButtonText("Pause");
         }
-
         isPlaying = !isPlaying;
     }
 
@@ -173,17 +233,130 @@ void PlayerGUI::buttonClicked(juce::Button* button)
             newPos = 0.0;
         playerAudio.setPosition(newPos);
     }
+    //AB
+    if (button == &setAButton) {
+        loopPointA = playerAudio.getPosition();
+        setAButton.setButtonText("A: " + juce::String(loopPointA, 2));
+    }
+
+    if (button == &setBButton) {
+        loopPointB = playerAudio.getPosition();
+        setBButton.setButtonText("B: " + juce::String(loopPointB, 2));
+    }
+
+    if (button == &clearABButton) {
+        loopPointA = -1.0;
+        loopPointB = -1.0;
+        setAButton.setButtonText("Set A");
+        setBButton.setButtonText("Set B");
+    }
+    // Track Markers
+    if (button == &addMarkerButton)
+    {
+        double currentTime = playerAudio.getPosition();
+        markerCount++;
+        juce::String label = "Marker " + juce::String(markerCount) + " (" +
+            juce::String((int)currentTime / 60) + ":" +
+            juce::String((int)currentTime % 60).paddedLeft('0', 2) + ")";
+
+        markers.push_back({ currentTime, label });
+        markerList.addItem(label, markerCount);
+    }
+    //Focous mood
+    if (button == &playFromMiddleButton)
+    {
+        double length = playerAudio.getLength();
+        double middle = length / 2.0;
+        playerAudio.setPosition(middle);
+        playerAudio.start();
+    }
+    //play list
+    if (button == &addToPlaylistButton)
+    {
+        fileChooser = std::make_unique<juce::FileChooser>("Select Audio Files", juce::File{}, "*.wav;*.mp3");
+        fileChooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectMultipleItems,
+            [this](const juce::FileChooser& chooser)
+            {
+                auto files = chooser.getResults();
+                for (auto& file : files)
+                {
+                    playlist.push_back(file);
+                    playlistBox.addItem(file.getFileName(), playlistBox.getNumItems() + 1);
+                }
+            });
+    }
+    else if (button == &playSelectedButton)
+    {
+        int selectedIndex = playlistBox.getSelectedItemIndex();
+        if (selectedIndex >= 0 && selectedIndex < playlist.size())
+        {
+            playerAudio.stop();
+            playerAudio.loadFile(playlist[selectedIndex]);
+            playerAudio.start();
+        }
+    }
+    
+    if (button == &clearPlaylistButton)
+    {
+        playlist.clear();
+        playlistBox.clear();
+    }
+    if (button == &removeSelectedButton)
+    {
+        int selectedIndex = playlistBox.getSelectedItemIndex();
+        if (selectedIndex >= 0 && selectedIndex < playlist.size())
+        {
+            playlist.erase(playlist.begin() + selectedIndex);
+
+            playlistBox.clear();
+            for (int i = 0; i < playlist.size(); ++i)
+            {
+                playlistBox.addItem(playlist[i].getFileName(), i + 1);
+            }
+        }
+    }
 }
 
 void PlayerGUI::sliderValueChanged(juce::Slider* slider)
 {
+    //slider
     if (slider == &volumeSlider)
     {
         if (!isMuted)
             playerAudio.setGain((float)slider->getValue());
         else
-            lastVolume = slider->getValue();
+            lastVolume = slider->getValue(); // update stored volume while muted
     }
+    else if (slider == &positionSlider)
+    {
+        playerAudio.setPosition(positionSlider.getValue());
+    }
+
+
+
+
+
 }
 
+void PlayerGUI::timerCallback() {
+    //slider
+    double currentPos = playerAudio.getPosition();
+    double totalLength = playerAudio.getLength();
 
+    if (playerAudio.getLength() > 0.0) {
+        positionSlider.setRange(0.0, totalLength, 0.01);
+        positionSlider.setValue(currentPos, juce::dontSendNotification);
+    }
+
+    int minutes = static_cast<int>(currentPos) / 60;
+    int seconds = static_cast<int>(currentPos) % 60;
+    juce::String timeText = juce::String(minutes) + ":" + juce::String(seconds).paddedLeft('0', 2);
+    timeLabel.setText(timeText, juce::dontSendNotification);
+
+    //AB
+    if (loopPointA >= 0.0 && loopPointB > loopPointA) {
+        if (currentPos >= loopPointB) {
+            playerAudio.setPosition(loopPointA);
+        }
+    }
+}

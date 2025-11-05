@@ -138,13 +138,3 @@ void MainComponent::sliderValueChanged(juce::Slider* slider)
     // ✅ Mixer sliders are handled in getNextAudioBlock
     // No action needed here since we read values directly
 }
-
-
-
-
-
-
-
-
-
-
