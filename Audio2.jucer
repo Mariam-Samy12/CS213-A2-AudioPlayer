@@ -13,6 +13,14 @@
       <FILE id="Ae88Ot" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
     </GROUP>
+    <FILE id="skPmIN" name="10 backward.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/10 backward.png"/>
+    <FILE id="SgH6KX" name="10 forward.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/10 forward.png"/>
+    <FILE id="lJhxqQ" name="backward.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/backward.png"/>
+    <FILE id="TlPWtu" name="forward.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/forward.png"/>
+    <FILE id="ugyS3T" name="pause.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/pause.png"/>
+    <FILE id="uqakOc" name="play.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/play.png"/>
+    <FILE id="VKA8RA" name="restart.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/restart.png"/>
+    <FILE id="V2QyJP" name="stop.png" compile="0" resource="1" file="../../../Desktop/CS213-A2-AudioPlayer/Images1/stop.png"/>
   </MAINGROUP>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>

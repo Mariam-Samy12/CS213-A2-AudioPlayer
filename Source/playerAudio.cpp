@@ -1,28 +1,25 @@
-#include "playerAudio.h"
+﻿#include "PlayerAudio.h"
+#include <taglib/fileref.h>
+#include <taglib/tag.h>
 
 PlayerAudio::PlayerAudio()
 {
     formatManager.registerBasicFormats();
 }
 
-PlayerAudio::~PlayerAudio()
-{
-    releaseResources();
-}
+PlayerAudio::~PlayerAudio() {}
 
 void PlayerAudio::prepareToPlay(int samplesPerBlockExpected, double sampleRate)
 {
-    const juce::ScopedLock sl(lock);
     transportSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
-    resampleSource.prepareToPlay(samplesPerBlockExpected, sampleRate);
 }
 
 void PlayerAudio::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    resampleSource.getNextAudioBlock(bufferToFill);
+    transportSource.getNextAudioBlock(bufferToFill);
 
-    if (isLooping && transportSource.getLengthInSeconds() > 0.0
-        && transportSource.getCurrentPosition() >= transportSource.getLengthInSeconds())
+    // ✅ LOOP handling
+    if (isLooping && !transportSource.isPlaying() && transportSource.getCurrentPosition() >= getLength())
     {
         transportSource.setPosition(0.0);
         transportSource.start();
@@ -31,61 +28,43 @@ void PlayerAudio::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferTo
 
 void PlayerAudio::releaseResources()
 {
-    const juce::ScopedLock sl(lock);
-    resampleSource.releaseResources();
     transportSource.releaseResources();
 }
 
 bool PlayerAudio::loadFile(const juce::File& file)
 {
-    if (!file.existsAsFile())
-        return false;
+    if (file.existsAsFile())
+    {
+        if (auto* reader = formatManager.createReaderFor(file))
+        {
+            transportSource.stop();
 
-    auto* reader = formatManager.createReaderFor(file);
-    if (reader == nullptr)
-        return false;
+            readerSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
 
-    const juce::ScopedLock sl(lock);
+            transportSource.setSource(readerSource.get(), 0, nullptr, reader->sampleRate);
 
-    transportSource.stop();
-    transportSource.setSource(nullptr);
-    readerSource.reset();
+            loadMetadata(file);
 
-    readerSource = std::make_unique<juce::AudioFormatReaderSource>(reader, true);
-
-    transportSource.setSource(
-        readerSource.get(),
-        0,
-        nullptr,
-        reader->sampleRate
-    );
-
+            transportSource.start();
+        }
+    }
     return true;
-
-
 }
 
-void PlayerAudio::start()
-{
-    transportSource.start();
-}
-
-void PlayerAudio::stop()
-{
-    transportSource.stop();
-}
+void PlayerAudio::start() { transportSource.start(); }
+void PlayerAudio::stop() { transportSource.stop(); }
 
 void PlayerAudio::setGain(float gain)
 {
-    const juce::ScopedLock sl(lock);
-    lastGain = gain;
     if (!isMuted)
+    {
         transportSource.setGain(gain);
+        lastGain = gain;
+    }
 }
 
 void PlayerAudio::setPosition(double pos)
 {
-    const juce::ScopedLock sl(lock);
     transportSource.setPosition(pos);
 }
 
@@ -99,12 +78,6 @@ double PlayerAudio::getLength() const
     return transportSource.getLengthInSeconds();
 }
 
-void PlayerAudio::setSpeed(double ratio)
-{
-    if (ratio > 0.0)
-        resampleSource.setResamplingRatio(ratio);
-}
-
 void PlayerAudio::setLooping(bool shouldLoop)
 {
     isLooping = shouldLoop;
@@ -112,7 +85,6 @@ void PlayerAudio::setLooping(bool shouldLoop)
 
 void PlayerAudio::setMuted(bool shouldMute)
 {
-    const juce::ScopedLock sl(lock);
     if (shouldMute && !isMuted)
     {
         lastGain = transportSource.getGain();
@@ -125,34 +97,29 @@ void PlayerAudio::setMuted(bool shouldMute)
     isMuted = shouldMute;
 }
 
-void PlayerAudio::saveSession(const juce::File& file, double position)
+// 🟢 Load Metadata
+void PlayerAudio::loadMetadata(const juce::File& file)
 {
-    auto session = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("lastSession.txt");
-    juce::String content = "file=" + file.getFullPathName() + "\n" + "position=" + juce::String(position);
-    session.replaceWithText(content);
-}
-
-bool PlayerAudio::loadSession(juce::File& file, double& position)
-{
-    auto session = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("lastSession.txt");
-    if (!session.existsAsFile())
-        return false;
-
-    juce::StringArray lines;
-    session.readLines(lines);
-
-    juce::String path;
-    juce::String posStr;
-    for (auto& l : lines)
+    TagLib::FileRef f(file.getFullPathName().toRawUTF8());
+    if (!f.isNull() && f.tag())
     {
-        if (l.startsWith("file=")) path = l.substring(5);
-        else if (l.startsWith("position=")) posStr = l.substring(9);
+        TagLib::Tag* tag = f.tag();
+        title = juce::String::fromUTF8(tag->title().toCString(true));
+        artist = juce::String::fromUTF8(tag->artist().toCString(true));
+        album = juce::String::fromUTF8(tag->album().toCString(true));
+        year = tag->year();
+    }
+    else
+    {
+        title = file.getFileNameWithoutExtension();
+        artist = "Unknown Artist";
+        album = "Unknown Album";
+        year = 0;
     }
 
-    if (path.isEmpty() || posStr.isEmpty())
-        return false;
-
-    file = juce::File(path);
-    position = posStr.getDoubleValue();
-    return true;
+    if (f.audioProperties())
+    {
+        auto* props = f.audioProperties();
+        duration = props->length();
+    }
 }
