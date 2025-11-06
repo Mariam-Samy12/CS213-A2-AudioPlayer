@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <JuceHeader.h>
 
 class PlayerAudio
@@ -17,19 +17,22 @@ public:
 
     void setGain(float gain);
     void setPosition(double pos);
+    void setSpeed(double ratio);
     double getPosition() const;
     double getLength() const;
-
+    void saveSession(const juce::File& file, double position);
+    bool loadSession(juce::File& file, double& position);
     void setLooping(bool shouldLoop);
     bool getLooping() const { return isLooping; }
 
     void setMuted(bool shouldMute);
     bool getMuted() const { return isMuted; }
 
-    
+
     juce::String getTitle() const { return title; }
     juce::String getArtist() const { return artist; }
     juce::String getAlbum() const { return album; }
+   
     int getYear() const { return year; }
     double getDuration() const { return duration; }
 
@@ -37,7 +40,7 @@ private:
     juce::AudioFormatManager formatManager;
     std::unique_ptr<juce::AudioFormatReaderSource> readerSource;
     juce::AudioTransportSource transportSource;
-
+    juce::ResamplingAudioSource resampleSource{ &transportSource,false,2 };
     bool isLooping = false;
     bool isMuted = false;
     float lastGain = 0.5f;
@@ -47,4 +50,5 @@ private:
     double duration = 0.0;
 
     void loadMetadata(const juce::File& file);
+
 };

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <JuceHeader.h>
 #include "PlayerAudio.h"
 
@@ -29,7 +29,7 @@ public:
 private:
     PlayerAudio playerAudio;
 
-    // 🎛 Buttons
+    //  Buttons
     juce::TextButton loadButton{ "Load File" };
     juce::TextButton restartButton{ "Restart" };
     juce::TextButton stopButton{ "Stop" };
@@ -40,7 +40,7 @@ private:
     juce::TextButton muteButton{ "Mute" };
     juce::TextButton forwardButton{ "+10s >>" };
     juce::TextButton backwardButton{ "<< -10s" };
-
+    juce::Slider speedSlider;
     juce::Slider volumeSlider;
     juce::Label infoLabel;
     juce::Slider positionSlider; //slider
@@ -52,6 +52,11 @@ private:
     juce::TextButton addMarkerButton{ "Add Marker" };// Track Markers
     juce::ComboBox markerList;// Track Markers
     juce::TextButton playFromMiddleButton{ " From Middle " };//Focous mood
+    // nine
+    juce::Slider progressSlider;
+    juce::Label currentTimeLabel, totalTimeLabel;
+
+
     //play list
     std::vector<juce::File> playlist;
     juce::ComboBox playlistBox;
@@ -69,6 +74,12 @@ private:
     //AB
     double loopPointA = -1.0;
     double loopPointB = -1.0;
+    //waves
+
+    juce::AudioThumbnailCache thumbnailCache{ 5 };
+    juce::AudioThumbnail thumbnail{ 512, formatManager, thumbnailCache };
+    juce::AudioFormatManager formatManager;
+    bool waveformLoaded = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PlayerGUI)
 };

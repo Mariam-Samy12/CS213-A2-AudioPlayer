@@ -21,11 +21,11 @@ private:
     PlayerGUI player1;
     PlayerGUI player2;
 
-    // ✅ Buffers for mixing
+    // Mixer
     juce::AudioBuffer<float> mixBuffer1;
     juce::AudioBuffer<float> mixBuffer2;
 
-    // ✅ Mixer controls
+    // Mixer 
     juce::Slider player1VolumeSlider;
     juce::Slider player2VolumeSlider;
     juce::Label player1Label, player2Label;

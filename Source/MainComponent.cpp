@@ -5,14 +5,14 @@ MainComponent::MainComponent()
     addAndMakeVisible(player1);
     addAndMakeVisible(player2);
 
-    // ✅ Setup mixer title
+    //  mixer 
     addAndMakeVisible(mixerTitle);
     mixerTitle.setText("MIXER", juce::dontSendNotification);
     mixerTitle.setFont(juce::Font(18.0f, juce::Font::bold));
     mixerTitle.setColour(juce::Label::textColourId, juce::Colours::white);
     mixerTitle.setJustificationType(juce::Justification::centred);
 
-    // ✅ Setup Player 1 mixer control
+    // Player 1 mixer control
     addAndMakeVisible(player1VolumeSlider);
     player1VolumeSlider.setRange(0.0, 1.0, 0.01);
     player1VolumeSlider.setValue(1.0);
@@ -26,7 +26,7 @@ MainComponent::MainComponent()
     player1Label.setColour(juce::Label::textColourId, juce::Colours::white);
     player1Label.setJustificationType(juce::Justification::centred);
 
-    // ✅ Setup Player 2 mixer control
+    //  Player 2 mixer control
     addAndMakeVisible(player2VolumeSlider);
     player2VolumeSlider.setRange(0.0, 1.0, 0.01);
     player2VolumeSlider.setValue(1.0);
@@ -54,31 +54,31 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
     player1.prepareToPlay(samplesPerBlockExpected, sampleRate);
     player2.prepareToPlay(samplesPerBlockExpected, sampleRate);
 
-    // ✅ Allocate mixing buffers
+    // Mixer
     mixBuffer1.setSize(2, samplesPerBlockExpected);
     mixBuffer2.setSize(2, samplesPerBlockExpected);
 }
 
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    // ✅ Clear main output buffer
+    // Mixer
     bufferToFill.clearActiveBufferRegion();
 
-    // ✅ Get audio from Player 1
+    // Mixer
     mixBuffer1.clear();
     juce::AudioSourceChannelInfo buffer1Info(&mixBuffer1, 0, bufferToFill.numSamples);
     player1.getNextAudioBlock(buffer1Info);
 
-    // ✅ Get audio from Player 2
+    // Mixer
     mixBuffer2.clear();
     juce::AudioSourceChannelInfo buffer2Info(&mixBuffer2, 0, bufferToFill.numSamples);
     player2.getNextAudioBlock(buffer2Info);
 
-    // ✅ Apply mixer gains
+    // Mixer
     float gain1 = (float)player1VolumeSlider.getValue();
     float gain2 = (float)player2VolumeSlider.getValue();
 
-    // ✅ Mix both players into output buffer
+    // Mixer
     for (int channel = 0; channel < bufferToFill.buffer->getNumChannels(); ++channel)
     {
         bufferToFill.buffer->addFrom(channel, bufferToFill.startSample,
@@ -99,13 +99,13 @@ void MainComponent::resized()
 {
     auto area = getLocalBounds();
 
-    // ✅ Reserve space for mixer controls on the right
+    //  mixer controls on the right
     auto mixerArea = area.removeFromRight(120);
 
-    // Mixer title
+    // Mixer
     mixerTitle.setBounds(mixerArea.removeFromTop(40));
 
-    // Player 1 mixer control
+    // Player 1 mixer 
     player1Label.setBounds(mixerArea.removeFromTop(25).reduced(5));
     player1VolumeSlider.setBounds(mixerArea.removeFromTop(220).reduced(10));
 
@@ -113,7 +113,7 @@ void MainComponent::resized()
     player2Label.setBounds(mixerArea.removeFromTop(25).reduced(5));
     player2VolumeSlider.setBounds(mixerArea.removeFromTop(220).reduced(10));
 
-    // ✅ Split remaining area for players
+    //  // Mixer
     auto top = area.removeFromTop(area.getHeight() / 2);
     player1.setBounds(top);
     player2.setBounds(area);
@@ -123,18 +123,17 @@ void MainComponent::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colours::darkgrey);
 
-    // ✅ Draw mixer panel background
+   
     auto mixerArea = getLocalBounds().removeFromRight(120);
     g.setColour(juce::Colour(50, 50, 50));
     g.fillRect(mixerArea);
 
-    // ✅ Draw border
+   
     g.setColour(juce::Colours::black);
     g.drawRect(mixerArea, 2);
 }
 
 void MainComponent::sliderValueChanged(juce::Slider* slider)
 {
-    // ✅ Mixer sliders are handled in getNextAudioBlock
-    // No action needed here since we read values directly
+    
 }
